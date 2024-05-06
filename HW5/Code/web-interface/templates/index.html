@@ -1,0 +1,96 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>IR Relavance</title>
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css">
+    <style>
+        body {
+            margin: 20px;
+            padding: 20px;
+            background-color: #1e1e1e; 
+            color: #e0e0e0; 
+        }
+        .link-container {
+            max-height: 400px;
+            overflow-y: scroll;
+            border: 1px solid #333; 
+            padding: 20px;
+            background-color: #333; 
+        }
+        .link-item {
+            display: flex;
+            align-items: center;
+            margin-bottom: 10px;
+        }
+        .link-item input[type="radio"] {
+            margin-right: 10px;
+        }
+        .rating-label {
+            margin-right: 20px;
+        }
+        .topic {
+            margin-bottom: 30px;
+            width: 75%;
+            background-color: #444;
+            padding: 15px;
+            border: 1px solid #666;
+            border-radius: 5px; 
+        }
+        a {
+            color: #4a90e2; 
+            text-decoration: none;
+            transition: color 0.3s;
+        }
+        a:hover {
+            color: #3d73a8;
+        }
+    </style>
+</head>
+<body>
+    {% for key in links %}
+    {% set outer_loop_index = loop.index-1 %}
+    <div class="topic">
+        <h3>Topic: {{key}} {{topics[key]}}</h3>
+        <div class="link-container">
+            <form>
+                <div id="links-container">
+                    {% for link in links[key] %}
+                    <div class="link-item">
+                        <label class="rating-label"> {{ 200*(outer_loop_index)+loop.index }} </label>
+                        <label class="rating-label"><input type="radio" name="rating_{{ loop.index }}" value="0">Non-Relevant</label>
+                        <label class="rating-label"><input type="radio" name="rating_{{ loop.index }}" value="1">Relevant</label>
+                        <label class="rating-label"><input type="radio" name="rating_{{ loop.index }}" value="2">Very Relevant</label>
+                        <a href="{{ link }}" target="_blank">{{ link[:70] }}</a>
+                        <input type="hidden" name="key" value="{{ key }}">
+                        <input type="hidden" name="index" value="{{ 200*(outer_loop_index)+loop.index }}">
+                    </div>
+                    {% endfor %}
+                </div>
+            </form>
+        </div>
+    </div>
+    {% endfor %}
+
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <script>
+        $(document).ready(function() {
+            $('input[type="radio"]').change(function() {
+                var rating = $(this).val();
+                var index = $(this).closest('.link-item').find('input[name="index"]').val();
+                var key = $(this).closest('.topic').find('input[name="key"]').val();
+                $.ajax({
+                    type: 'POST',
+                    url: '/update_rating',
+                    data: { index: index, rating: rating, key: key },
+                    success: function(response) {
+                        console.log(response);
+                    },
+                    error: function(error) {
+                        console.log(error);
+                    }
+                });
+            });
+        });
+    </script>
+</body>
+</html>

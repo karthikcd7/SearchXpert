@@ -1,0 +1,7 @@
+**/.DS_Store
+IR_data/
+.ipynb_checkpoints
+**/output/ids
+**/output/merged_files
+**/output/with_stemming
+**/output/without_stemming

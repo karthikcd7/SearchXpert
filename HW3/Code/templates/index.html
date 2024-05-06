@@ -1,0 +1,26 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Climate Change - Search Engine</title>
+</head>
+<body>
+    <h1>Climate Change - Search Engine</h1>
+    <form action="/search" method="get">
+        <input type="text" name="query" placeholder="Enter your query">
+        <button type="submit">Search</button>
+    </form>
+    {% if error %}
+        <p>{{ error }}</p>
+    {% endif %}
+    {% if query %}
+        <h2>Search Results for "{{ query }}"</h2>
+        <ul>
+            {% for result in search_results %}
+                <li><a href="{{ result.docno }}" target="_blank">{{ result.title }}</a></li>
+            {% endfor %}
+        </ul>
+    {% endif %}
+</body>
+</html>
