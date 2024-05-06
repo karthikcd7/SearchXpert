@@ -1,0 +1,8 @@
+.DS_Store
+IR_data
+output/
+Results/
+data/
+dataset.csv
+trec07p
+trec07p.tgz
